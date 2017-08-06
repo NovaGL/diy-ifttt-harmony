@@ -1,0 +1,187 @@
+[
+    {
+        "id": "c09cc148.04a358",
+        "type": "tab",
+        "label": "Harmony IFTT",
+        "disabled": false,
+        "info": "Store the channel names you want in the Channels inject node.\n\nYou have two option\n- Channel by name\n- Number ( starting at 100, if number is less than 100, 100 is added)\n "
+    },
+    {
+        "id": "3cac8061.987868",
+        "type": "inject",
+        "z": "c09cc148.04a358",
+        "name": "Channels",
+        "topic": "",
+        "payload": "[{\"name\":\"ABC\",\"channel\":202},{\"name\":\"SBS\",\"channel\":228},{\"name\":\"SBS 2\",\"channel\":142},{\"name\":\"SBS FOOD\",\"channel\":143},{\"name\":\"CHANNEL 7\",\"channel\":207},{\"name\":\"CHANNEL 9\",\"channel\":209},{\"name\":\"CHANNEL 10\",\"channel\":210},{\"name\":\"9 GO\",\"channel\":139},{\"name\":\"9 GEM\",\"channel\":192},{\"name\":\"9 LIFE\",\"channel\":194},{\"name\":\"UKTV\",\"channel\":103},{\"name\":\"ARENA\",\"channel\":105},{\"name\":\"LIFESTYLE\",\"channel\":106},{\"name\":\"FOX 8\",\"channel\":108},{\"name\":\"UNIVERSAL\",\"channel\":112},{\"name\":\"FOX CLASSICS\",\"channel\":113},{\"name\":\"SOHO\",\"channel\":114},{\"name\":\"SHOWCASE\",\"channel\":115},{\"name\":\"BOXSETS\",\"channel\":116},{\"name\":\"BBC FIRST\",\"channel\":117},{\"name\":\"13TH STREET\",\"channel\":118},{\"name\":\"FX\",\"channel\":119},{\"name\":\"THE COMEDY CHANNEL\",\"channel\":121},{\"name\":\"A&E\",\"channel\":122},{\"name\":\"SYFY\",\"channel\":123},{\"name\":\"MTV\",\"channel\":124},{\"name\":\"E\",\"channel\":125},{\"name\":\"STYLE\",\"channel\":126},{\"name\":\"LIFESTYLE FOOD\",\"channel\":127},{\"name\":\"LIFESTYLE HOME\",\"channel\":128},{\"name\":\"LIFESTYLE YOU\",\"channel\":129},{\"name\":\"TLC\",\"channel\":130},{\"name\":\"STUDIO\",\"channel\":132},{\"name\":\"BIO\",\"channel\":133},{\"name\":\"SKY NEWS\",\"channel\":601},{\"name\":\"SKY NEWS BUSINESS\",\"channel\":602},{\"name\":\"WEATHER\",\"channel\":603},{\"name\":\"FOX NEWS\",\"channel\":604},{\"name\":\"CNN\",\"channel\":605},{\"name\":\"DISCOVERY\",\"channel\":608},{\"name\":\"NATIONAL GEOGRAPHIC\",\"channel\":610},{\"name\":\"HISTORY\",\"channel\":611},{\"name\":\"BBC KNOWLEDGE\",\"channel\":612},{\"name\":\"CRIME\",\"channel\":613},{\"name\":\"ANIMAL PLANET\",\"channel\":615},{\"name\":\"NAT  GEO WILD\",\"channel\":616},{\"name\":\"NAT GEO PEOPLE\",\"channel\":628},{\"name\":\"DISCOVERY TURBO MAX\",\"channel\":634},{\"name\":\"DISCOVERY SCIENCE\",\"channel\":638},{\"name\":\"ABC NEWS\",\"channel\":642},{\"name\":\"CNBC\",\"channel\":644},{\"name\":\"A-PAC\",\"channel\":648},{\"name\":\"BBC\",\"channel\":649},{\"name\":\"BLOOMBERG\",\"channel\":650},{\"name\":\"ALJAZEERA\",\"channel\":651},{\"name\":\"ABC 2\",\"channel\":134},{\"name\":\"NICKELODEON\",\"channel\":701},{\"name\":\"NICK JR\",\"channel\":703},{\"name\":\"CBEEBIES\",\"channel\":705},{\"name\":\"DISNEY\",\"channel\":707},{\"name\":\"DISNEY XD\",\"channel\":708},{\"name\":\"DISNEY JUNIOR\",\"channel\":709},{\"name\":\"CARTOON NETWORK\",\"channel\":713},{\"name\":\"BOOMERANG\",\"channel\":715},{\"name\":\"DISCOVERY KIDS\",\"channel\":718}]",
+        "payloadType": "json",
+        "repeat": "",
+        "crontab": "",
+        "once": true,
+        "x": 80,
+        "y": 40,
+        "wires": [
+            [
+                "de6160aa.5a00b8"
+            ]
+        ]
+    },
+    {
+        "id": "de6160aa.5a00b8",
+        "type": "change",
+        "z": "c09cc148.04a358",
+        "name": "Store Channels",
+        "rules": [
+            {
+                "t": "move",
+                "p": "payload",
+                "pt": "msg",
+                "to": "channels",
+                "tot": "flow"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 240,
+        "y": 40,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "d8286a35.39ca38",
+        "type": "switch",
+        "z": "c09cc148.04a358",
+        "name": "IFTTT Action",
+        "property": "payload.type",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "eq",
+                "v": "FavoriteChannelRequest",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "ChannelRequest",
+                "vt": "str"
+            }
+        ],
+        "checkall": "true",
+        "outputs": 2,
+        "x": 200,
+        "y": 180,
+        "wires": [
+            [
+                "cc9d5966.f6c75",
+                "fd0729a3.264198"
+            ],
+            [
+                "1778968a.a4e1a1",
+                "fd0729a3.264198"
+            ]
+        ],
+        "inputLabels": [
+            "IFTTT"
+        ],
+        "outputLabels": [
+            "Channel Name",
+            "Channel Numbers"
+        ]
+    },
+    {
+        "id": "1778968a.a4e1a1",
+        "type": "function",
+        "z": "c09cc148.04a358",
+        "name": "Split Channel",
+        "func": "var num = msg.payload.command;\nif (num < 100) {num = num + 100;}\nvar digits = num.toString().split('');\nvar channelnumbers = digits.map(Number);\nvar url = \"http://\" + msg.payload.ip  + \"/hubs/\" + msg.payload.hub +\"/devices/iq2/commands/\";\nvar msg1 = { url:url+channelnumbers[0] };\nvar msg2 = { url:url+channelnumbers[1] };\nvar msg3 = { url:url+channelnumbers[2]};\nreturn [ [ msg1, msg2, msg3 ] ];",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 583,
+        "y": 186,
+        "wires": [
+            [
+                "594b23ab.ff45bc"
+            ]
+        ]
+    },
+    {
+        "id": "594b23ab.ff45bc",
+        "type": "http request",
+        "z": "c09cc148.04a358",
+        "name": "Send Channel Request",
+        "method": "POST",
+        "ret": "obj",
+        "url": "",
+        "tls": "",
+        "x": 783,
+        "y": 186,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "fd0729a3.264198",
+        "type": "http response",
+        "z": "c09cc148.04a358",
+        "name": "Response",
+        "statusCode": "",
+        "headers": {},
+        "x": 373,
+        "y": 220,
+        "wires": []
+    },
+    {
+        "id": "cc9d5966.f6c75",
+        "type": "change",
+        "z": "c09cc148.04a358",
+        "name": "Set Channel Number",
+        "rules": [
+            {
+                "t": "set",
+                "p": "channels",
+                "pt": "msg",
+                "to": "channels",
+                "tot": "flow"
+            },
+            {
+                "t": "set",
+                "p": "payload.command",
+                "pt": "msg",
+                "to": "channels[name=$uppercase($$.payload.command)\t].channel",
+                "tot": "jsonata"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 403,
+        "y": 160,
+        "wires": [
+            [
+                "1778968a.a4e1a1"
+            ]
+        ]
+    },
+    {
+        "id": "5557652b.70415c",
+        "type": "http in",
+        "z": "c09cc148.04a358",
+        "name": "IFTTT",
+        "url": "/IFTTT",
+        "method": "post",
+        "upload": false,
+        "swaggerDoc": "",
+        "x": 59,
+        "y": 180,
+        "wires": [
+            [
+                "d8286a35.39ca38"
+            ]
+        ]
+    }
+]
