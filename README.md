@@ -32,8 +32,8 @@ Open the webpage eg: localhost:8282.
 It will give you a list of hub names that we will use later. Eg. my-room
 
 ## BST Proxy setup
-**Make sure you are using at least v1.0.7 for better security with a key in the url**
-**If v1.0.7 is not out yet add @1.0.7 to end of below command**
+**Make sure you are using at least v1.0.7 for better security with a key in the url**    
+__If v1.0.7 is not out yet add @1.0.7 to end of below command__
 
 Installed BST using `npm install bespoken-tools -g`
 To test BST Proxy we use the following command after BST is installed.
@@ -52,8 +52,8 @@ To make this run in background we use PM2.
 
 Create a directory to store the BST command in.
 
-Eg make a directory called "bst" 
-Store a file in there called proxy.sh
+Eg make a directory called "bst"   
+Store a file in there called proxy.sh  
 In that file save the same command as above ```bst proxy http 80 --secure```
 
 Now to save that command to BST, we do the following in the same directory as the script.
@@ -68,7 +68,7 @@ This will save the script under the name "bst-proxy" and make sure it starts on 
 
 What we want to do with ifttt is to create a trigger using either Alexa or Google Assistant depending on your platform.
 
-Choose what you want to say. (If you have multiple rooms, it's best to include the room name)
+Choose what you want to say. (If you have multiple rooms, it's best to include the room name) 
 
 #is for number $ is for text
 
@@ -91,12 +91,12 @@ And another way? (optional)| Switch to #
 What do you want the Assistant to say in response?| Changing to #
 
 ### Make a web request
-Next we want to choose the "Webhook" Action
+Next we want to choose the "Webhook" Action 
 The URL is the one we got from BST and add IFTTT to the end 
 
 Title| Action
 ------------ | -------------
-URL | https://[myskill].bespoken.link?bespoken-key=XXXXXXXX-XXXX-XXXX-XXXX-XXXX-XXXXXXXX/IFTTT
+URL | https://[myskill].bespoken.link/IFTTT?bespoken-key=XXXXXXXX-XXXX-XXXX-XXXX-XXXX-XXXXXXXX/
 Method| POST
 Content Type| application/json
 Body | {"command": "{{TextField}}","type": "FavoriteChannelRequest","hub": "my-room","ip": "localhost:8282"}
@@ -116,7 +116,7 @@ On the next step give it a descriptive name and save.
 ## Node-Red Flow
 Once you have Node-Red up and running. Copy harmony-ifft.json to clipboard.
 
-Menu > Clipboard > Import > paste the example and press deploy.
+**Menu > Clipboard > Import > paste the example and press deploy.**
 
 This should create a HTTP endpoint which will accept HTTP POST requests at /IFTTT
 
