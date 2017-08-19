@@ -32,6 +32,8 @@ Open the webpage eg: localhost:8282.
 It will give you a list of hub names that we will use later. Eg. my-room
 
 ## BST Proxy setup
+**Make sure you are using at least v1.0.7 for better security with a key in the url**
+**If v1.0.7 is not out yet add @1.0.7 to end of below command**
 
 Installed BST using `npm install bespoken-tools -g`
 To test BST Proxy we use the following command after BST is installed.
@@ -39,7 +41,7 @@ To test BST Proxy we use the following command after BST is installed.
 
 It will then say something similar to.
 ```Your public URL for accessing your local service:```
-```https://myskill.bespoken.link```
+```https://myskill.bespoken.link?bespoken-key=XXXXXXXX-XXXX-XXXX-XXXX-XXXX-XXXXXXXX```
 
 This URL will be used for our webhook commands in the IFTTT section.
 
@@ -52,11 +54,11 @@ Create a directory to store the BST command in.
 
 Eg make a directory called "bst" 
 Store a file in there called proxy.sh
-In that file save the same command as above ```bst proxy http 80```
+In that file save the same command as above ```bst proxy http 80 --secure```
 
 Now to save that command to BST, we do the following in the same directory as the script.
 
-```pm2 start proxy.sh --name="bst-proxt"```
+```pm2 start proxy.sh --name="bst-proxy"```
 ```pm2 startup```
 
 This will save the script under the name "bst-proxy" and make sure it starts on boot.
@@ -94,7 +96,7 @@ The URL is the one we got from BST and add IFTTT to the end
 
 Title| Action
 ------------ | -------------
-URL | https://[myskill].bespoken.link/IFTTT
+URL | https://[myskill].bespoken.link?bespoken-key=XXXXXXXX-XXXX-XXXX-XXXX-XXXX-XXXXXXXX/IFTTT
 Method| POST
 Content Type| application/json
 Body | {"command": "{{TextField}}","type": "FavoriteChannelRequest","hub": "my-room","ip": "localhost:8282"}
